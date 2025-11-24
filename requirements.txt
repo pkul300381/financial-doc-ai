@@ -6,7 +6,7 @@ pydantic<2
 # OCR & Document Processing
 pytesseract==0.3.10
 pdf2image==1.16.3
-Pillow==10.1.0
+Pillow>=10.1.0
 camelot-py[cv]==0.11.0
 pdfplumber==0.10.3
 opencv-python==4.8.1.78
