@@ -3,7 +3,19 @@ End-to-end document processing pipeline.
 
 This orchestrates: ingestion → OCR → LLM extraction → vectorization → anomaly detection
 """
+import sys
 import logging
+
+try:
+    import pandas
+    import fastapi
+    import pydantic
+    import langchain
+    import chromadb
+except ImportError:
+    print("--> Required Python packages are not installed.", file=sys.stderr)
+    print("--> Please run 'pip install -r requirements.txt' to install the dependencies.", file=sys.stderr)
+    sys.exit(1)
 import time
 import uuid
 from pathlib import Path

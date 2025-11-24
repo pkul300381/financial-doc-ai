@@ -8,7 +8,19 @@ Provides REST API endpoints for:
 - Insights and anomaly detection
 - Monitoring metrics
 """
+import sys
 import logging
+
+try:
+    import pandas
+    import fastapi
+    import pydantic
+    import langchain
+    import chromadb
+except ImportError:
+    print("--> Required Python packages are not installed.", file=sys.stderr)
+    print("--> Please run 'pip install -r requirements.txt' to install the dependencies.", file=sys.stderr)
+    sys.exit(1)
 import os
 import uuid
 from datetime import datetime
