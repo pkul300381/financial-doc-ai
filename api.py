@@ -18,6 +18,7 @@ from pathlib import Path
 from fastapi import FastAPI, File, UploadFile, HTTPException, Depends, Header
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from prometheus_client import Counter, Histogram, generate_latest
 from prometheus_client import CONTENT_TYPE_LATEST
 from starlette.responses import Response
@@ -101,6 +102,10 @@ async def startup_event():
     get_pipeline()
     
     logger.info("API startup complete")
+
+
+# Mount static files for UI
+app.mount("/ui", StaticFiles(directory="ui", html=True), name="ui")
 
 
 @app.get("/")

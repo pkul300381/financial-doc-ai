@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Document AI - Extraction & Analysis</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                        <rect width="32" height="32" rx="8" fill="url(#gradient)"/>
+                        <path d="M16 8L24 12V20L16 24L8 20V12L16 8Z" stroke="white" stroke-width="2" stroke-linejoin="round"/>
+                        <defs>
+                            <linearGradient id="gradient" x1="0" y1="0" x2="32" y2="32">
+                                <stop offset="0%" stop-color="#6366f1"/>
+                                <stop offset="100%" stop-color="#8b5cf6"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                    <h1>Financial Document AI</h1>
+                </div>
+                <div class="status-indicator">
+                    <span class="status-dot"></span>
+                    <span id="apiStatus">Connecting...</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Upload Section -->
+            <section class="card upload-section">
+                <h2>📄 Upload Document</h2>
+                <div class="upload-area" id="uploadArea">
+                    <input type="file" id="fileInput" accept=".pdf,.png,.jpg,.jpeg,.tiff" hidden>
+                    <div class="upload-icon">
+                        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <p class="upload-text">Drag & drop your document here</p>
+                    <p class="upload-subtext">or click to browse</p>
+                    <p class="upload-formats">Supports: PDF, PNG, JPG, JPEG, TIFF</p>
+                </div>
+                <div class="upload-progress hidden" id="uploadProgress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <p id="progressText">Processing...</p>
+                </div>
+            </section>
+
+            <!-- Tabs -->
+            <div class="tabs">
+                <button class="tab active" data-tab="extraction">Extraction Results</button>
+                <button class="tab" data-tab="query">RAG Query</button>
+                <button class="tab" data-tab="insights">Insights & Anomalies</button>
+            </div>
+
+            <!-- Tab Content -->
+            <div class="tab-content">
+                <!-- Extraction Results Tab -->
+                <div class="tab-pane active" id="extraction-tab">
+                    <div class="card">
+                        <div id="extractionResults" class="empty-state">
+                            <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" stroke-width="2"/>
+                                <polyline points="14 2 14 8 20 8" stroke-width="2"/>
+                                <line x1="16" y1="13" x2="8" y2="13" stroke-width="2"/>
+                                <line x1="16" y1="17" x2="8" y2="17" stroke-width="2"/>
+                                <polyline points="10 9 9 9 8 9" stroke-width="2"/>
+                            </svg>
+                            <p>No document processed yet</p>
+                            <p class="subtext">Upload a document to see extraction results</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RAG Query Tab -->
+                <div class="tab-pane" id="query-tab">
+                    <div class="card">
+                        <h3>🔍 Ask Questions About Your Documents</h3>
+                        <div class="query-input-group">
+                            <textarea id="queryInput" placeholder="e.g., What is the total amount of all invoices?" rows="3"></textarea>
+                            <button id="queryBtn" class="btn btn-primary">
+                                <span>Ask Question</span>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <line x1="22" y1="2" x2="11" y2="13" stroke-width="2"/>
+                                    <polygon points="22 2 15 22 11 13 2 9 22 2" stroke-width="2"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <div id="queryResults" class="query-results hidden"></div>
+                    </div>
+                </div>
+
+                <!-- Insights & Anomalies Tab -->
+                <div class="tab-pane" id="insights-tab">
+                    <div class="card">
+                        <h3>💡 Insights</h3>
+                        <div id="insightsList" class="empty-state">
+                            <p>No insights available yet</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h3>⚠️ Anomalies</h3>
+                        <div id="anomaliesList" class="empty-state">
+                            <p>No anomalies detected</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Documents List Sidebar -->
+        <aside class="sidebar">
+            <div class="card">
+                <h3>📚 Processed Documents</h3>
+                <div id="documentsList" class="documents-list">
+                    <div class="empty-state small">
+                        <p>No documents yet</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>
